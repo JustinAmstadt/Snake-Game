@@ -1,0 +1,1 @@
+This is the snake game for the purpose of collecting data on the game for AI training

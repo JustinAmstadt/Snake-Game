@@ -1,0 +1,3 @@
+
+char getChar( void );
+

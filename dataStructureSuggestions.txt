@@ -1,0 +1,47 @@
+
+You need a way to represent a cell -- a row and a column
+
+
+class Worm {
+
+    // initially, use STL's queue class. 
+    // Once you finish your project, 
+    // change the implementation to a circular queue.
+
+    addHead  // given a cell, adds it to the queue to represent the new head of the queue
+    removeTail // removes the element that has been in the queue the longest.
+    head // return the cell that represents the head element of the queue
+    tail // return the cell that represents the tail element of the queue
+
+}
+
+
+class ScreenDS {
+
+   // freepool (a 1D vector) and screen (a 2D vector)
+
+   // initialize the internal representation of the screen in the constructor
+
+   // functions
+   mkFree  -- given a cell, make it to be a free cell
+   mkOccupied -- given a free cell, make it so that it no longer is free, it is a cell
+                 that belongs to the worm
+   isFree -- given a cell, determine if it is free or not
+   getARandomCell -- randomly selects and returns a free cell to represents a munchie
+
+}
+
+
+create instances of Worm and ScreenDS
+draw the screen using curses to reflect the Worm and ScreenDS data structures
+
+generate a munchie and save its location
+while the worm is alive do
+    read a character from the keyboard (or type on for the user)
+    incorporate this character into the internal data structure and the screen.
+       using the current position of the head of the worm, calculate its new head position
+       if the new position of the head is an occupied space, terminate the program
+       otherwise, move the worm's head into the new position
+       if the new position is the munchie position -- take care of that
+       if it is necessary to remove the tail, do that
+done
