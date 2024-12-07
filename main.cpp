@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 
-#include "getChar.hpp"
 #include "Worm.hpp"
 #include "Screen.hpp"
 #include "Cell.hpp"
