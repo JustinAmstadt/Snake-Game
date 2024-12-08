@@ -8,8 +8,6 @@
 #include "Cell.hpp"
 #include "Board.hpp"
 
-#define NUM_GAMES 5000
-
 bool move(Screen* screen, Worm* worm, int x, int y, int& munchieValue, int& newTailCount) {
      int newX = worm->getHead()->getX() + x;
      int newY = worm->getHead()->getY() + y;
@@ -52,20 +50,23 @@ void renderHeader(int score) {
 
 int main(int argc, char *argv[])
 {
-     int numRows = 0;
-     int numColumns = 0;
+     int numRows = 9;
+     int numColumns = 9;
+
+     int numGames = 0;
 
      if (argc == 1) {
-          numRows = 9;
-          numColumns = 9;
-     } else if (argc == 3) {
-          numRows = std::stoi(argv[1]);
-          numColumns = std::stoi(argv[2]);
+          numGames = 10;
+     } else if (argc == 2) {
+          numGames = std::stoi(argv[1]);
+     } else {
+          std::cout << "Program usage: ./worm.x <optional game count>" << std::endl;
+          exit(1);
      }
 
      int gameCounter = 0;
 
-     while (gameCounter < NUM_GAMES) {
+     while (gameCounter < numGames) {
           Board board(numRows, numColumns);
 
           Cell startHeadLocation(numRows / 2, numColumns / 2);
