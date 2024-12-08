@@ -1,19 +1,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <random>
 
 #include "Worm.hpp"
 #include "Screen.hpp"
 #include "Cell.hpp"
 #include "Board.hpp"
 
-void startup( void );
-void terminate( void );
+#define NUM_GAMES 5000
 
-// TODO Free the tail first
-bool move(Screen* screen, Worm* worm, int x, int y, int& munchieValue) {
-     static int newTailCount = 0;
-
+bool move(Screen* screen, Worm* worm, int x, int y, int& munchieValue, int& newTailCount) {
      int newX = worm->getHead()->getX() + x;
      int newY = worm->getHead()->getY() + y;
 
@@ -41,6 +38,13 @@ bool move(Screen* screen, Worm* worm, int x, int y, int& munchieValue) {
      return screen->makeOccupied(newX, newY);
 }
 
+char chooseRandomInput() {
+    const char directions[] = {'w', 'a', 's', 'd'};
+    std::random_device rd; // Random device for seeding
+    std::mt19937 gen(rd()); // Mersenne Twister engine
+    std::uniform_int_distribution<> dis(0, 3); // Generate numbers 0 to 3
+    return directions[dis(gen)];
+}
 
 void renderHeader(int score) {
      std::cout << "Score: " << score << std::endl;
@@ -59,57 +63,68 @@ int main(int argc, char *argv[])
           numColumns = std::stoi(argv[2]);
      }
 
-     Board board(numRows, numColumns);
+     int gameCounter = 0;
 
-     Cell startHeadLocation(numRows / 2, numColumns / 2);
+     while (gameCounter < NUM_GAMES) {
+          Board board(numRows, numColumns);
 
-     Worm* worm = new Worm(startHeadLocation, numRows, numColumns);
-     Screen* screen = new Screen(numRows, numColumns);
-     // Initial head location
-     screen->makeOccupied(startHeadLocation.getX(), startHeadLocation.getY());
+          Cell startHeadLocation(numRows / 2, numColumns / 2);
 
-     screen->makeMunchie();
+          Worm* worm = new Worm(startHeadLocation, numRows, numColumns);
+          Screen* screen = new Screen(numRows, numColumns);
+          // Initial head location
+          screen->makeOccupied(startHeadLocation.getX(), startHeadLocation.getY());
 
-     int score = 0;
+          screen->makeMunchie();
 
-     bool lostFlag = true;
-     char input = 'z';
-     char lastInput = input;
-     while (input != 'x' && lostFlag) {
-          int munchieValue = 0;
-          // worm->print();
-          // screen->printScreen();
-          screen->correctnessReport();
-          renderHeader(score);
-          board.writeWalls();
-          screen->renderMunchie(board);
-          worm->renderWorm(board);
-          board.renderBoard();
-          board.clearBoard();
+          int score = 0;
+          int newTailCount = 0;
 
-          std::cin >> input;
+          bool lostFlag = true;
+          char input = 'z';
+          char lastInput = input;
+          while (input != 'x' && lostFlag) {
+               int munchieValue = 0;
+               screen->correctnessReport();
 
-          switch(input) {
-               case 'w':
-               case 'k':
-                    lostFlag = move(screen, worm, 0, -1, munchieValue);
-                    break;
-               case 's':
-               case 'j':
-                    lostFlag = move(screen, worm, 0, 1, munchieValue);
-                    break;
-               case 'a':
-               case 'h':
-                    lostFlag = move(screen, worm, -1, 0, munchieValue);
-                    break;
-               case 'd':
-               case 'l':
-                    lostFlag = move(screen, worm, 1, 0, munchieValue);
-                    break;
-               case 'x':
-                    break;
+               renderHeader(score);
+               board.writeWalls();
+               screen->renderMunchie(board);
+               worm->renderWorm(board);
+               board.renderBoard();
+               board.clearBoard();
+
+               input = chooseRandomInput();
+               std::cout << input << std::endl;
+
+               std::cout << std::endl;
+
+               switch(input) {
+                    case 'w':
+                    case 'k':
+                         lostFlag = move(screen, worm, 0, -1, munchieValue, newTailCount);
+                         break;
+                    case 's':
+                    case 'j':
+                         lostFlag = move(screen, worm, 0, 1, munchieValue, newTailCount);
+                         break;
+                    case 'a':
+                    case 'h':
+                         lostFlag = move(screen, worm, -1, 0, munchieValue, newTailCount);
+                         break;
+                    case 'd':
+                    case 'l':
+                         lostFlag = move(screen, worm, 1, 0, munchieValue, newTailCount);
+                         break;
+                    case 'x':
+                         break;
+               }
+
+               score += munchieValue;
           }
-
-          score += munchieValue;
+          delete worm;
+          delete screen;
+          gameCounter++;
+          std::cout << "-" << std::endl;
      }
 }

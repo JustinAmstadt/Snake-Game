@@ -1,13 +1,10 @@
 #include <iomanip>
-#include <cstdlib>
-#include <ctime>
+#include <random>
 
 #include "Screen.hpp"
 #include "Board.hpp"
 
 Screen::Screen(int rowSize, int columnSize) {
-    // Seed random number generator
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     // Bounds checking
     if (rowSize < 9 || rowSize > 25) {
@@ -146,10 +143,15 @@ int Screen::chooseARandomFreeCell() {
 }
 
 void Screen::makeMunchie() {
-    int lower = 1, upper = 9;
-    munchieValue = lower + std::rand() % (upper - lower + 1); // Choose a value between 1 and 9
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 9); // Choose between 1 - 9
+
+    munchieValue = dis(gen);
+
     int munchieFpIndex = chooseARandomFreeCell();
     munchieLocation = freePool[munchieFpIndex];
+
     makeOccupied(munchieLocation);
 }
 

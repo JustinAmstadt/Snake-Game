@@ -7,6 +7,13 @@ Worm::Worm(Cell headLocation, int numRows, int numColumns) {
     tail = 0;
 }
 
+Worm::~Worm() {
+    for (Cell* cell : queue) {
+        delete cell;
+    }
+    queue.clear();
+}
+
 void Worm::addHead(Cell location) {
     if (queue.empty()) {
         std::cout << "ERROR: Trying to add a head when the vector is empty";
@@ -68,7 +75,7 @@ void Worm::renderWorm(Board &board) {
 
     // Render tail
     int index = tail;
-    int headCheck = head - 1;
+    int headCheck = (head - 1 < 0) ? queue.size() - 1 : head - 1;
     while (index != headCheck) {
         Cell* tailCell = queue.at(index);
         if (tailCell == nullptr) {

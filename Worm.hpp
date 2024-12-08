@@ -10,6 +10,7 @@
 class Worm {
 public:
     Worm(Cell headLocation, int numRows, int numColumns);
+    ~Worm();
     void removeTail();
     Cell* getHead();
     Cell* getTail();

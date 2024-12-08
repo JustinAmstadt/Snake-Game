@@ -3,7 +3,7 @@
 #include "Cell.hpp"
 
 Cell::Cell() {
-    std::cout << "WARNING: Setting a Cell value to -1, -1!!" << std::endl;
+    // std::cout << "WARNING: Setting a Cell value to -1, -1!!" << std::endl;
     Cell(-1, -1);
 }
 
